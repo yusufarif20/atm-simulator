@@ -1,4 +1,5 @@
 How to use :
+
 Install Node.js (add to path)
 
 Open terminal cd atm-simulator
@@ -6,6 +7,7 @@ Open terminal cd atm-simulator
 Open XAMPP and build database name : atm-simulator
 
 type in terminal : node atm.js setup 
+
 
 command : 
 
@@ -22,6 +24,7 @@ node atm.js withdraw
 node atm.js transfer 
 
 node atm.js history
+
 
 example :
 
