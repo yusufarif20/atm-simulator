@@ -136,6 +136,8 @@ async function registerAccount(name) {
 }
 
 // Command: Login
+const fs = require('fs'); // Tambahkan di atas file
+
 async function loginAccount(accountNumber) {
     if (!accountNumber) {
         console.log('❌ Nomor akun harus diisi!');
@@ -173,6 +175,9 @@ async function loginAccount(accountNumber) {
             balance: parseFloat(account.balance)
         };
 
+        // ✅ Simpan ke file session.json
+        fs.writeFileSync('session.json', JSON.stringify(currentUser), 'utf8');
+
         console.log('\n✅ Login berhasil!');
         console.log(`👤 Selamat datang, ${currentUser.name}`);
         console.log(`💰 Saldo: ${formatCurrency(currentUser.balance)}\n`);
@@ -185,9 +190,14 @@ async function loginAccount(accountNumber) {
 
 // Command: Check Balance
 async function checkBalance() {
+
     if (!currentUser) {
-        console.log('❌ Anda harus login terlebih dahulu!');
-        return;
+        try {
+            currentUser = JSON.parse(fs.readFileSync('session.json', 'utf8'));
+        } catch {
+            console.log('❌ Anda harus login terlebih dahulu!');
+            return;
+        }
     }
 
     try {
@@ -218,9 +228,13 @@ async function checkBalance() {
 // Command: Deposit
 async function deposit(amount) {
     if (!currentUser) {
-        console.log('❌ Anda harus login terlebih dahulu!');
-        return;
-    }
+        try {
+            currentUser = JSON.parse(fs.readFileSync('session.json', 'utf8'));
+        } catch {
+            console.log('❌ Anda harus login terlebih dahulu!');
+            return;
+        }
+    }    
 
     const depositAmount = parseFloat(amount);
     
@@ -266,9 +280,13 @@ async function deposit(amount) {
 // Command: Withdraw
 async function withdraw(amount) {
     if (!currentUser) {
-        console.log('❌ Anda harus login terlebih dahulu!');
-        return;
-    }
+        try {
+            currentUser = JSON.parse(fs.readFileSync('session.json', 'utf8'));
+        } catch {
+            console.log('❌ Anda harus login terlebih dahulu!');
+            return;
+        }
+    }    
 
     const withdrawAmount = parseFloat(amount);
     
@@ -331,9 +349,13 @@ async function withdraw(amount) {
 // Command: Transfer
 async function transfer(targetAccount, amount) {
     if (!currentUser) {
-        console.log('❌ Anda harus login terlebih dahulu!');
-        return;
-    }
+        try {
+            currentUser = JSON.parse(fs.readFileSync('session.json', 'utf8'));
+        } catch {
+            console.log('❌ Anda harus login terlebih dahulu!');
+            return;
+        }
+    }    
 
     if (!targetAccount || !amount) {
         console.log('❌ Nomor akun tujuan dan jumlah transfer harus diisi!');
@@ -439,9 +461,13 @@ async function transfer(targetAccount, amount) {
 // Command: Transaction History
 async function showHistory() {
     if (!currentUser) {
-        console.log('❌ Anda harus login terlebih dahulu!');
-        return;
-    }
+        try {
+            currentUser = JSON.parse(fs.readFileSync('session.json', 'utf8'));
+        } catch {
+            console.log('❌ Anda harus login terlebih dahulu!');
+            return;
+        }
+    }    
 
     try {
         const connection = await createConnection();
@@ -489,9 +515,13 @@ async function showHistory() {
 // Command: Logout
 function logout() {
     if (!currentUser) {
-        console.log('❌ Anda belum login!');
-        return;
-    }
+        try {
+            currentUser = JSON.parse(fs.readFileSync('session.json', 'utf8'));
+        } catch {
+            console.log('❌ Anda harus login terlebih dahulu!');
+            return;
+        }
+    }    
 
     console.log(`👋 Sampai jumpa, ${currentUser.name}!`);
     currentUser = null;
